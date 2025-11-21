@@ -1,0 +1,44 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  padding: 20px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.card h2 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.card p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.card .address {
+  font-style: italic;
+  margin: 10px 0;
+}
+
+.card .contact {
+  margin: 10px 0;
+}
+
+.card .company {
+  margin: 10px 0;
+  font-weight: bold;
+}
