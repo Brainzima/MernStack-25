@@ -2,11 +2,12 @@ import { useContext } from "react"
 import ThemeContext from "../ThemeContext"
 
 function Box(){
-    const [theme, toggleTheme] = useContext(ThemeContext)
+    const {theme, toggleTheme} = useContext(ThemeContext)
     return(
         <>
-            <div className="box" style={{backgroundColor: theme=='light' ? 'black' : 'green'}}>
-                Hey I am a BOX.
+            <div className="box" style={{backgroundColor: theme == 'light' ? 'beige' : 'black'}}>
+                Hey I am a BOX.  
+                <button onClick={toggleTheme}>Toggle</button>
             </div>
         </>
     )
