@@ -2,8 +2,8 @@ import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 
 export default function Cart() {
-    const { cart } = useContext(CartContext)
-    const totalPrice = cart.reduce((total, item)=>total*item.price,0)
+    const { cart, removeFromCart } = useContext(CartContext)
+    const totalPrice = cart.reduce((total, item)=> total+item.price,0)
     return (
         <>
 
@@ -59,7 +59,7 @@ export default function Cart() {
                                         <p class="text-gray-500">${item.price}</p>
                                         <div class="flex items-center mt-2">
 
-                                            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Remove</button>
+                                            <button onClick={()=>removeFromCart(item.id)} class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Remove</button>
                                         </div>
                                     </div>
                                 </div>
@@ -68,15 +68,15 @@ export default function Cart() {
                                 <div class="bg-white rounded-xl shadow-md p-4 mt-6">
                                     <div class="flex justify-between text-lg font-semibold">
                                         <span>Subtotal</span>
-                                        <span>${totalPrice}</span>
+                                        <span>${totalPrice.toFixed(2)}</span>
                                     </div>
                                     <div class="flex justify-between mt-2 text-gray-600">
                                         <span>Tax</span>
-                                        <span>$9.58</span>
+                                        <span>${(totalPrice*5/100).toFixed(2)}</span>
                                     </div>
                                     <div class="flex justify-between mt-2 text-xl font-bold">
                                         <span>Total</span>
-                                        <span>$105.47</span>
+                                        <span>${((totalPrice*5/100)+totalPrice).toFixed(2)}</span>
                                     </div>
                                     <button onClick={()=>alert("Aage ka backend me dekhenge!")} class="w-full bg-blue-600 text-white mt-4 py-2 rounded-lg hover:bg-blue-700">Proceed to Checkout</button>
                                 </div>
