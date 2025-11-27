@@ -1,6 +1,6 @@
 import './App.css'
+import AllTransactions from './components/AllTransactions'
 import Dashboard from './components/Dashboard'
-import ExpenseIncomeList from './components/ExpenseIncomeList'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
 import TransactionForm from './components/TransactionForm'
@@ -13,7 +13,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path='/' element={<Dashboard/>}/>
-        <Route path='/transaction' element={<ExpenseIncomeList/>}/>
+        <Route path='/transaction' element={<AllTransactions/>}/>
         <Route path='/add' element={<TransactionForm/>}/>
       </Routes>
     </Router>
