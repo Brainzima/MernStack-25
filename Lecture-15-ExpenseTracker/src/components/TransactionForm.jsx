@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { GlobalContext } from "../context/GlobalState";
+import { Toast } from "./Toast";
 
 const categories = [
   "Food & Dining",
@@ -14,9 +16,10 @@ const categories = [
   "Other",
 ];
 
-const paymentMethods = ["Cash", "UPI", "Card", "Bank Transfer", "Other"];
+const paymentMethods = ["Cash", "UPI", "Card", "Cheque", "Other"];
 
-const TransactionForm = ({ onSubmit, onCancel }) => {
+const TransactionForm = (onCancel) => {
+  const {addTransaction} = useContext(GlobalContext)
   const [type, setType] = useState("expense"); // "expense" | "income"
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
@@ -24,6 +27,7 @@ const TransactionForm = ({ onSubmit, onCancel }) => {
   const [category, setCategory] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [note, setNote] = useState("");
+  const [status, setStatus] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,10 +42,7 @@ const TransactionForm = ({ onSubmit, onCancel }) => {
       paymentMethod,
       note,
     };
-
-    if (onSubmit) {
-      onSubmit(payload);
-    }
+    addTransaction(payload)
 
     // Clear form after submit
     setTitle("");
@@ -51,9 +52,12 @@ const TransactionForm = ({ onSubmit, onCancel }) => {
     setPaymentMethod("");
     setNote("");
     setType("expense");
+    setStatus(true)
   };
 
   return (
+    <div className="py-6 space-y-6">
+      {status ? <Toast status='success' message='Added Transaction'/> : '' }
     <div className="mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-5 shadow-lg">
       {/* Header */}
       <div className="mb-4 flex items-center justify-between gap-2">
@@ -207,15 +211,6 @@ const TransactionForm = ({ onSubmit, onCancel }) => {
 
         {/* Actions */}
         <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-end">
-          {onCancel && (
-            <button
-              type="button"
-              onClick={onCancel}
-              className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-            >
-              Cancel
-            </button>
-          )}
           <button
             type="submit"
             className="inline-flex items-center justify-center rounded-full bg-slate-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-slate-800"
@@ -224,6 +219,7 @@ const TransactionForm = ({ onSubmit, onCancel }) => {
           </button>
         </div>
       </form>
+    </div>
     </div>
   );
 };

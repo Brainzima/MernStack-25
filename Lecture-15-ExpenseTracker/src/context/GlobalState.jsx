@@ -11,7 +11,7 @@ export const GlobalProvider = ({ children }) => {
             amount: 500,
             date: Date.now(),
             category: 'Food & Dinning',
-            pmode: 'upi',
+            paymentMethod: 'upi',
             note: 'tesing the transactions'
         },
         {
@@ -21,7 +21,37 @@ export const GlobalProvider = ({ children }) => {
             amount: 400,
             date: Date.now(),
             category: 'Food & Dinning',
-            pmode: 'upi',
+            paymentMethod: 'upi',
+            note: 'tesing the khana'
+        },
+        {
+            id: 3,
+            type: 'income',
+            title: 'Biryani Khaye',
+            amount: 200,
+            date: Date.now(),
+            category: 'Food & Dinning',
+            paymentMethod: 'upi',
+            note: 'tesing the khana'
+        },
+        {
+            id: 4,
+            type: 'expense',
+            title: 'Momo Khaye',
+            amount: 465,
+            date: Date.now(),
+            category: 'Food & Dinning',
+            paymentMethod: 'cash',
+            note: 'tesing the khana'
+        },
+        {
+            id: 5,
+            type: 'income',
+            title: 'Papa Bheje',
+            amount: 4005,
+            date: Date.now(),
+            category: 'Food & Dinning',
+            paymentMethod: 'upi',
             note: 'tesing the khana'
         }
     ])

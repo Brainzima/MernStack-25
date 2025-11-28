@@ -1,7 +1,11 @@
-import React, { useState } from "react";
-
-const Dashboard = ({ onAddExpenseClick }) => {
+import { useContext, useState } from "react";
+import { GlobalContext } from "../context/GlobalState";
+import { Balance } from "./Balance";
+import { Income } from "./Income";
+import Expense from "./Expense";
+const Dashboard = () => {
   const [range, setRange] = useState("month");
+  const {transactions} = useContext(GlobalContext)
 
   const summaryStats = {
     balance: "₹24,500",
@@ -15,39 +19,8 @@ const Dashboard = ({ onAddExpenseClick }) => {
     { id: "year", label: "This year" },
   ];
 
-  const fakeTransactions = [
-    {
-      id: 1,
-      title: "Groceries",
-      category: "Food & Dining",
-      amount: "-₹1,200",
-      date: "Today • 10:24 AM",
-    },
-    {
-      id: 2,
-      title: "Salary",
-      category: "Income",
-      amount: "+₹25,000",
-      date: "Yesterday • 09:00 AM",
-    },
-    {
-      id: 3,
-      title: "Netflix",
-      category: "Subscriptions",
-      amount: "-₹499",
-      date: "Mon • 08:14 PM",
-    },
-    {
-      id: 4,
-      title: "Uber",
-      category: "Transport",
-      amount: "-₹320",
-      date: "Sun • 06:32 PM",
-    },
-  ];
-
   return (
-    <main className="bg-slate-50">
+    
       <div className="mx-auto max-w-6xl px-4 py-6 space-y-6">
         {/* Top bar: title + filters + action */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -96,64 +69,13 @@ const Dashboard = ({ onAddExpenseClick }) => {
         {/* Summary cards */}
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {/* Balance */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between gap-2">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  Total Balance
-                </p>
-                <p className="mt-2 text-xl font-semibold text-slate-900">
-                  {summaryStats.balance}
-                </p>
-                <p className="mt-1 text-xs text-emerald-600">
-                  ▲ 12.4% vs last month
-                </p>
-              </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-sm font-semibold text-white">
-                ₹
-              </div>
-            </div>
-          </div>
+          <Balance/>
 
           {/* Income */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between gap-2">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  Total Income
-                </p>
-                <p className="mt-2 text-xl font-semibold text-slate-900">
-                  {summaryStats.income}
-                </p>
-                <p className="mt-1 text-xs text-emerald-600">
-                  ▲ 8.9% vs last month
-                </p>
-              </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-sm font-semibold text-emerald-700">
-                ↑
-              </div>
-            </div>
-          </div>
+          <Income/>
 
           {/* Expense */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center justify-between gap-2">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  Total Expense
-                </p>
-                <p className="mt-2 text-xl font-semibold text-slate-900">
-                  {summaryStats.expense}
-                </p>
-                <p className="mt-1 text-xs text-rose-600">
-                  ▼ 3.1% vs last month
-                </p>
-              </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-100 text-sm font-semibold text-rose-700">
-                ↓
-              </div>
-            </div>
-          </div>
+          <Expense/>
         </section>
 
         {/* Main grid: chart + recent transactions */}
@@ -196,7 +118,7 @@ const Dashboard = ({ onAddExpenseClick }) => {
             </div>
 
             <ul className="space-y-3">
-              {fakeTransactions.map((tx) => (
+              {transactions.map((tx) => (
                 <li
                   key={tx.id}
                   className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5"
@@ -217,12 +139,12 @@ const Dashboard = ({ onAddExpenseClick }) => {
                   <p
                     className={
                       "text-sm font-semibold " +
-                      (tx.amount.startsWith("-")
+                      (tx.type == 'expense'
                         ? "text-rose-600"
                         : "text-emerald-600")
                     }
                   >
-                    {tx.amount}
+                    {tx.type == 'expense' ? '-' : '+'}{tx.amount}
                   </p>
                 </li>
               ))}
@@ -230,7 +152,7 @@ const Dashboard = ({ onAddExpenseClick }) => {
           </div>
         </section>
       </div>
-    </main>
+    
   );
 };
 
