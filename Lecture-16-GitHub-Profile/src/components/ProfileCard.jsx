@@ -1,5 +1,6 @@
 // ProfileCard.jsx
 import React, { useEffect, useState } from 'react';
+import './RepoList.css'
 import { 
   FaGithub, 
   FaMapMarkerAlt, 
