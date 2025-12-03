@@ -1,31 +1,58 @@
 import React, { useState } from 'react';
+import YouTube from 'react-youtube'
+import movieTrailer from 'movie-trailer'
 
 const MovieSearchComponent = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [movieData, setMovieData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [videoid, setVideoid] = useState("")
+  const opts = {
+    height: '650',
+    width: '1200',
+    playerVars: {
+      // https://developers.google.com/youtube/player_parameters
+      autoplay: 1,
+    },
+  };
+
+  function handleTrailer(movieData) {
+    movieTrailer(movieData.Title || movieData.Plot)
+      .then(response => {
+        const url = response;
+        const params = new URLSearchParams(new URL(url).search);
+        const videoId = params.get('v');
+        console.log(videoId);
+        setVideoid(videoId)
+      })
+      .catch(error => {
+        console.error('Error fetching trailer:', error);
+      });
+  }
+
 
   // Mock API call - in real implementation, you would connect to an actual movie API
   const searchMovie = async (query) => {
     if (!query.trim()) return;
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       // Simulating API call with your example data
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       // In real implementation, you would fetch from an API like:
       const response = await fetch(`https://www.omdbapi.com/?t=${query}&apikey=84db3d22`);
-          const data = await response.json();
-          setMovieData(data);      
+      const data = await response.json();
+      setMovieData(data);
     } catch (err) {
       setError('Failed to fetch movie data. Please try again.');
       console.error('Search error:', err);
     } finally {
       setLoading(false);
+      setVideoid("")
     }
   };
 
@@ -48,7 +75,7 @@ const MovieSearchComponent = () => {
                 Movie Search
               </h1>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="w-full md:w-auto">
               <div className="relative group">
                 <input
@@ -77,7 +104,7 @@ const MovieSearchComponent = () => {
                 </button>
               </div>
             </form>
-            
+
             <div className="hidden md:flex items-center gap-4">
               <button className="text-gray-300 hover:text-white transition-colors">
                 Favorites
@@ -120,10 +147,11 @@ const MovieSearchComponent = () => {
                     <img
                       src={movieData.Poster}
                       alt={movieData.Title}
+                      onClick={() => handleTrailer(movieData)}
                       className="w-full h-auto rounded-2xl shadow-2xl"
                     />
                   </div>
-                  
+
                   <div className="lg:w-2/3">
                     <div className="flex flex-col gap-4">
                       <div>
@@ -140,7 +168,7 @@ const MovieSearchComponent = () => {
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <p className="text-gray-400 mb-1">Director</p>
@@ -159,7 +187,7 @@ const MovieSearchComponent = () => {
                           <p className="font-semibold">{movieData.Released}</p>
                         </div>
                       </div>
-                      
+
                       <div className="mt-4">
                         <p className="text-gray-400 mb-2">Plot</p>
                         <p className="text-lg leading-relaxed">{movieData.Plot}</p>
@@ -168,7 +196,20 @@ const MovieSearchComponent = () => {
                   </div>
                 </div>
               </div>
-              
+
+              {
+                videoid ?
+                  <YouTube videoId={videoid} opts={opts} />
+                  :
+                  <div className='text-center'>
+                    <button className="group inline-block rounded-full bg-linear-to-r from-pink-500 via-red-500 to-yellow-500 p-0.5 hover:text-white text-black" onClick={()=>handleTrailer(movieData)}>
+                    <span className="block rounded-full bg-white px-8 py-3 text-sm font-medium group-hover:bg-transparent">
+                      Click to Show Trailer
+                    </span>
+                  </button>
+                  </div>
+              }
+
               {/* Movie Details */}
               <div className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -180,23 +221,23 @@ const MovieSearchComponent = () => {
                     </div>
                     <div className="text-sm text-gray-400 mt-1">{movieData.imdbVotes} votes</div>
                   </div>
-                  
+
                   <div className="bg-gray-900/50 p-6 rounded-2xl">
                     <p className="text-gray-400 mb-2">Box Office</p>
                     <div className="text-2xl font-bold">{movieData.BoxOffice}</div>
                   </div>
-                  
+
                   <div className="bg-gray-900/50 p-6 rounded-2xl">
                     <p className="text-gray-400 mb-2">Language</p>
                     <div className="text-xl font-semibold">{movieData.Language}</div>
                   </div>
-                  
+
                   <div className="bg-gray-900/50 p-6 rounded-2xl">
                     <p className="text-gray-400 mb-2">Country</p>
                     <div className="text-xl font-semibold">{movieData.Country}</div>
                   </div>
                 </div>
-                
+
                 {/* Awards */}
                 <div className="mt-8">
                   <h3 className="text-2xl font-bold mb-4">Awards & Nominations</h3>
@@ -204,7 +245,7 @@ const MovieSearchComponent = () => {
                     <p className="text-lg">{movieData.Awards}</p>
                   </div>
                 </div>
-                
+
                 {/* Ratings */}
                 <div className="mt-8">
                   <h3 className="text-2xl font-bold mb-4">Ratings</h3>
