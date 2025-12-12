@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  /* color: rgba(255, 255, 255, 0.87); */
   background-color: #242424;
 
   font-synthesis: none;
@@ -23,4 +23,31 @@
   font-size: 3rem;
   text-align: center;
   user-select: none;
+}
+.normal{
+  color: white;
+}
+.incorrect{
+  color: red;
+  text-decoration: underline;
+  background-color: rgb(211, 164, 164);
+}
+.correct{
+  color: green;
+  background-color: rgb(190, 224, 190);
+}
+.active{
+  color: aqua;
+  border-right: 1px solid aqua;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50%{
+    color: transparent;
+  }
+}
+
+input{
+  opacity: 0;
 }

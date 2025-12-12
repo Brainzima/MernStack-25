@@ -15,17 +15,39 @@ function App() {
         <h1>Typing Master</h1>  <hr />
         <div className="display-text">
           {
-            paragraph.split('').map((char, index) => (
-              <span key={index}>{char}</span>
+            paragraph.split('').map((char, index) => {
+              let colorClass = 'normal'
+
+
+
+              if (userInput.length === index) {
+                colorClass += ' active'
+              }else if(index<userInput.length){
+                if (userInput[index] === char) {
+                colorClass += ' correct'
+              } else if (userInput[index] !== char) {
+                colorClass += ' incorrect'
+              }
+              }
               
-            ))
+
+
+              return (
+                <span key={index} className={colorClass}>
+                  {char}
+                </span>
+              )
+
+            })
           }
         </div>
+
+        <h3>Typed Characters: {userInput.length}</h3>
 
         <input
           type="text"
           value={userInput}
-          onChange={(e)=>setUserInput(e.target.value)}
+          onChange={(e) => setUserInput(e.target.value)}
           ref={inputRef}
           autoFocus
         />
