@@ -90,6 +90,50 @@ function App() {
     setIsEdit(true);
   }
 
+  const updateEmployee = async(e)=>{
+    e.preventDefault();
+    if (nameedit == '' || emailedit == '' || roleedit == '') {
+      toast.error("Field Cant be empty!");
+    } else {
+      const editEmp = {
+        name: nameedit,
+        email: emailedit,
+        role: roleedit
+      };
+      try {
+        const response = await fetch(`http://localhost:4000/api/employees/${editid}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editEmp),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Employee updated successfully:', data);
+          setEmployees(employees.map((emp)=>{
+            if(emp.id === editid){
+              [...emp, editEmp]
+            }
+            return emp;
+          }));
+          fetchData();
+          setNameedit('');
+          setEmailedit('');
+          setRoleedit('');
+          setEditid('');
+          setIsEdit(false);
+          toast.success("Employee Updated Successfully!");
+        } else {
+          console.error('Server returned an error:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error connecting to the server:', error);
+      }
+    }
+  }
+
   return (
     <>
       <ToastContainer />
@@ -100,7 +144,7 @@ function App() {
           isEdit ?
 
             <div className="card card-body">
-              <form onSubmit={addEmployee}>
+              <form onSubmit={updateEmployee}>
                 <div className="row">
                   <div className="col-md-4">
                     <input
@@ -121,6 +165,7 @@ function App() {
                   <div className="col-md-2">
                     <select
                       value={roleedit}
+                      onChange={(e)=>setRoleedit(e.target.value)}
                       className="form-select" >
                       <option defaultValue="Peon">Select Role</option>
                       <option value="Manager">Manager</option>
