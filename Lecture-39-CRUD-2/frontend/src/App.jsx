@@ -112,13 +112,7 @@ function App() {
         if (response.ok) {
           const data = await response.json();
           console.log('Employee updated successfully:', data);
-          setEmployees(employees.map((emp)=>{
-            if(emp.id === editid){
-              [...emp, editEmp]
-            }
-            return emp;
-          }));
-          fetchData();
+          setEmployees(employees.map((emp)=> emp._id == editid ? editEmp : emp ));
           setNameedit('');
           setEmailedit('');
           setRoleedit('');
