@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require('./routes/userRoutes');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -20,6 +21,23 @@ mongoose.connect(process.env.MONGO_URI)
 app.get('/',(req, res)=>{
     res.json({message: "Welcome to MVC Setup."});
 });
+
+// Routes
+app.get('/jwt',(req, res)=>{
+
+    const token = jwt.sign(
+        {name:"Ajit"},
+        "SECRECT_KEY",
+        {expiresIn:"1h"}
+    )
+
+    res.json({
+        message: "Welcome to JWT Setup.",
+        token: token
+    });
+});
+
+
 
 // Employee routes - use directly with app
 app.use('/api/users', userRoutes);

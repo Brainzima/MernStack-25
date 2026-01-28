@@ -1,5 +1,7 @@
+require('dotenv').config();
 const User = require("../models/User");
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -49,15 +51,51 @@ exports.updateUser = async (req, res) => {
     }
 }
 
+// exports.loginUser = async (req, res) => {
+//     try {
+//         const {email, password} = req.body;
+//         const user = await User.findOne({email});
+//         const dbpass = user.password;
+//         const isMatch = bcrypt.compare(password, dbpass);
+//         const msg = isMatch ? 'Login Succcess' : 'Incorrect Password!';
+//         res.status(200).json({message: msg});
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// }
+
+//    LOGIN USER
 exports.loginUser = async (req, res) => {
     try {
-        const {email, password} = req.body;
-        const user = await User.find({email: email});
-        const dbpass = user.password;
-        const isMatch = bcrypt.compare(password, dbpass);
-        const msg = isMatch ? 'Login Succcess' : 'Incorrect Password!';
-        res.status(200).json({message: msg});
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(500).json({ message: "Invalid email" });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(500).json({ message: "Invalid  password" });
+        }
+
+        const token = jwt.sign(
+            {userId: user._id,
+            role: user.role,
+            name:user.name},
+            process.env.JWT_SECRET_KEY,
+            {expiresIn: "1h"}
+        )
+
+        res.status(200).json({
+            message: "Login successful",
+            token: token,
+            userId: user._id,
+            role: user.role,
+            name:user.name
+        });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
