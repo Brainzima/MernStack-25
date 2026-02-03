@@ -23,19 +23,19 @@ app.get('/',(req, res)=>{
 });
 
 // Routes
-app.get('/jwt',(req, res)=>{
+// app.get('/jwt',(req, res)=>{
 
-    const token = jwt.sign(
-        {name:"Ajit"},
-        "SECRECT_KEY",
-        {expiresIn:"1h"}
-    )
+//     const token = jwt.sign(
+//         {name:"Ajit"},
+//         "SECRECT_KEY",
+//         {expiresIn:"1h"}
+//     )
 
-    res.json({
-        message: "Welcome to JWT Setup.",
-        token: token
-    });
-});
+//     res.json({
+//         message: "Welcome to JWT Setup.",
+//         token: token
+//     });
+// });
 
 
 
