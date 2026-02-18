@@ -1,13 +1,28 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../slices/cartSlice";
 
 export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [qnty, setQnty] = useState(1)
+
+//   const addToCartHandler = () => {
+//  dispatch(addToCart({ ...product, qty }))
+
+//     navigate('/cart')
+//   }
+const dispatch = useDispatch()
+const navigate = useNavigate()
+const addToCartHandle = () => {
+  dispatch(addToCart({...product, qnty}))
+  navigate('/cart');
+}
 
   const fetchProduct = async () => {
     try {
@@ -104,7 +119,13 @@ export default function ProductDetails() {
 
           {/* Buttons */}
           <div className="mt-8 flex gap-4">
+            <input 
+            type="number"
+            value={qnty}
+            onChange={()=>setQnty(qnty+1)}
+             />
             <button
+            onClick={addToCartHandle}
               disabled={product.countInStock === 0}
               className={`px-8 py-3 rounded-2xl transition ${
                 product.countInStock === 0

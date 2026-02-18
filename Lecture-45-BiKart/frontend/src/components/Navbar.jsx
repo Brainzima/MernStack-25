@@ -32,12 +32,14 @@ export default function Navbar() {
 
         {/* Icons */}
         <div className="flex items-center gap-6">
+          <Link to="/cart">
           <div className="relative cursor-pointer">
             <ShoppingCart className="w-6 h-6 text-gray-700 hover:text-indigo-600 transition" />
             <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs px-2 py-0.5 rounded-full">
               2
             </span>
           </div>
+          </Link>
           <User className="w-6 h-6 text-gray-700 hover:text-indigo-600 transition cursor-pointer" />
 
           {/* Mobile Menu */}
