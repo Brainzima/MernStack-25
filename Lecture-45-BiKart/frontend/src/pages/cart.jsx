@@ -1,24 +1,23 @@
 import { Trash2, Plus, Minus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux'
+import { removeFromCart } from "../slices/cartSlice";
 
 export default function Cart() {
-  // Dummy cart data (replace with context later)
-  const cartItems = [
-    {
-      _id: "1",
-      name: "Premium Makhana 500g",
-      image:
-        "https://images.unsplash.com/photo-1589924691995-400dc9ecc0af?w=400",
-      price: 399,
-      quantity: 2,
-      countInStock: 10,
-    },
-  ];
-
+  const navigate = useNavigate()
+  const cart = useSelector((state)=>state.cart)
+  const {cartItems} = cart;
+  console.log(cartItems)
+  const dispatch = useDispatch()
+  
   const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+    (acc, item) => acc + item.price * item.qnty,
     0
   );
+
+  const handleCheckout = ()=>{
+    alert("Order Placed!");
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -69,7 +68,7 @@ export default function Cart() {
                       </button>
 
                       <span className="font-medium text-gray-700">
-                        {item.quantity}
+                        {item.qnty}
                       </span>
 
                       <button className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition">
@@ -79,7 +78,7 @@ export default function Cart() {
                   </div>
 
                   {/* Remove */}
-                  <button className="text-red-500 hover:text-red-600 transition">
+                  <button onClick={()=>dispatch(removeFromCart(item._id))}  className="text-red-500 hover:text-red-600 transition">
                     <Trash2 />
                   </button>
                 </div>
@@ -109,7 +108,7 @@ export default function Cart() {
                 </div>
               </div>
 
-              <button className="mt-8 w-full bg-indigo-600 text-white py-3 rounded-2xl hover:bg-indigo-700 transition">
+              <button onClick={handleCheckout} className="mt-8 w-full bg-indigo-600 text-white py-3 rounded-2xl hover:bg-indigo-700 transition">
                 Proceed to Checkout
               </button>
 
