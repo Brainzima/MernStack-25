@@ -5,15 +5,18 @@ import { toast } from "react-toastify";
 
 export default function Products() {
     const [products, setProducts] = useState([]);
-    const fetchProducts = async()=>{
-        try {
-            const response = await fetch('http://localhost:3000/api/product');
-            const data = await response.json();
-            setProducts(data);
-        } catch (error) {
-            toast.error("Failed to fetch the products.");
-        }
-    }
+   const fetchProducts = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/api/product');
+    const data = await response.json();
+
+    setProducts(data); 
+
+  } catch (error) {
+    toast.error("Failed to fetch the products.");
+  }
+}
+
     useEffect(()=>{
         fetchProducts();
     },[])
@@ -27,7 +30,7 @@ export default function Products() {
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
 

@@ -1,3 +1,4 @@
+
 import { useNavigate, useParams } from "react-router-dom";
 import { Star } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -12,23 +13,23 @@ export default function ProductDetails() {
   const [error, setError] = useState(null);
   const [qnty, setQnty] = useState(1)
 
-//   const addToCartHandler = () => {
-//  dispatch(addToCart({ ...product, qty }))
+  //   const addToCartHandler = () => {
+  //  dispatch(addToCart({ ...product, qty }))
 
-//     navigate('/cart')
-//   }
-const dispatch = useDispatch()
-const navigate = useNavigate()
-const addToCartHandle = () => {
-  dispatch(addToCart({...product, qnty}))
-  navigate('/cart');
-}
+  //     navigate('/cart')
+  //   }
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const addToCartHandle = () => {
+    dispatch(addToCart({ ...product, qnty }))
+    navigate('/cart');
+  }
 
   const fetchProduct = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`http://localhost:3000/api/product/${id}`);
+      const response = await fetch(`http://localhost:5000/api/product/${id}`);
       if (!response.ok) throw new Error("Product not found");
       const data = await response.json();
       setProduct(data);
@@ -119,19 +120,18 @@ const addToCartHandle = () => {
 
           {/* Buttons */}
           <div className="mt-8 flex gap-4">
-            <input 
-            type="number"
-            value={qnty}
-            onChange={()=>setQnty(qnty+1)}
-             />
+            <input
+              type="number"
+              value={qnty}
+              onChange={() => setQnty(qnty + 1)}
+            />
             <button
-            onClick={addToCartHandle}
+              onClick={addToCartHandle}
               disabled={product.countInStock === 0}
-              className={`px-8 py-3 rounded-2xl transition ${
-                product.countInStock === 0
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-indigo-600 text-white hover:bg-indigo-700"
-              }`}
+              className={`px-8 py-3 rounded-2xl transition ${product.countInStock === 0
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-indigo-600 text-white hover:bg-indigo-700"
+                }`}
             >
               Add to Cart
             </button>

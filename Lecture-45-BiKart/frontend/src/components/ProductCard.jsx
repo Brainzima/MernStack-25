@@ -1,12 +1,28 @@
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addToCart } from "../slices/cartSlice";
+import { useState } from "react";
 
 export default function ProductCard({ product }) {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [qnty] = useState(1);
+
+  const addToCartHandle = (e) => {
+    e.stopPropagation();   // VERY IMPORTANT
+    e.preventDefault();    // prevents Link navigation
+
+    dispatch(addToCart({ ...product, qnty }));
+    navigate("/cart");
+  };
   return (
     <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-4">
-      
+
       <Link to={`/product/${product._id}`}>
-        
+
         {/* Image */}
         <div className="relative overflow-hidden rounded-xl">
           <img
@@ -45,12 +61,12 @@ export default function ProductCard({ product }) {
             </span>
 
             <button
+              onClick={addToCartHandle}
               disabled={product.countInStock === 0}
-              className={`px-4 py-2 rounded-xl text-sm transition ${
-                product.countInStock === 0
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-indigo-600 text-white hover:bg-indigo-700"
-              }`}
+              className={`px-4 py-2 rounded-xl text-sm transition ${product.countInStock === 0
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-indigo-600 text-white hover:bg-indigo-700"
+                }`}
             >
               Add
             </button>
