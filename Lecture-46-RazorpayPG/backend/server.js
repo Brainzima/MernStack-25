@@ -15,26 +15,30 @@ app.get('/', (req, res) => {
     res.json({ message: "Welcome to PG Setup." });
 });
 
-app.post('/create-order', async(req, res) => {
-    var instance =await new Razorpay({ key_id: process.env.API_KEY, key_secret: process.env.API_SECRET })
+app.post('/create-order', async (req, res) => {
+  const { amount } = req.body;
+  const instance = new Razorpay({ 
+    key_id: process.env.API_KEY, 
+    key_secret: process.env.API_SECRET 
+  });
 
-    var options = {
-        amount: 50000,  // Amount is in currency subunits. 
-        currency: "INR",
-        receipt: "order_rcptid_11"
-    };
-    try {
-       await instance.orders.create(options)
-        res.json({ message: "Order Created"});    
-    } catch (error) {
-        res.json({ message: "Order Creation Failed" });
-    }
+  const options = {
+    amount: parseInt(amount) * 100,  // Convert to paise
+    currency: "INR",
+    receipt: `receipt#${Date.now()}`
+  };
 
-    
-
+  try {
+    const order = await instance.orders.create(options);
+    res.json(order);  // Return full order object with id
+  } catch (error) {
+    res.status(500).json({ error: "Order Creation Failed", details: error.message });
+  }
 });
 
 // Start server
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on http://localhost:${process.env.PORT}`);
+    // console.log(process.env.API_KEY)
+    // console.log(process.env.API_SECRET)
 });
